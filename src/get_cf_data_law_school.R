@@ -82,7 +82,10 @@ model_ugpa <- lm(UGPA ~ female + nonwhite + 1, data=df_lev3)
 summary(model_ugpa)
 
 model_lsat <- lm(LSAT ~ female + nonwhite + 1, data=df_lev3)
+# model_lsat <- lm(log(LSAT) ~ female + nonwhite + 1, data=df_lev3)
+# exp(model_lsat$coefficients)
 summary(model_lsat)
+
 
 # perform the abduction step: estimate the residuals
 df_lev3$resid_UGPA = df_lev3$UGPA - predict(model_ugpa, newdata=df_lev3)
