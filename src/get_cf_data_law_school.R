@@ -32,7 +32,7 @@ org_df <- read.csv(file = paste(path_data, "LawSchool.csv", sep = ""), sep = '|'
 use_race = "race_nonwhite"
 vars <- c("LSAT", "UGPA", "sex")
 vars <- append(vars, use_race)
-# modified vars for scf generation
+# modified vars for counterfactual generation
 vars_m <- c("LSAT", "UGPA")
 
 # modeling data
@@ -78,13 +78,11 @@ vars_m <- append(vars_m, sense_cols)
 df_lev3 <- df
 
 # Step 1: train model for descendant nodes, and 
-model_ugpa <- lm(UGPA ~ 
-                   female + nonwhite + 1, 
-                 data=df_lev3)
+model_ugpa <- lm(UGPA ~ female + nonwhite + 1, data=df_lev3)
+summary(model_ugpa)
 
-model_lsat <- lm(LSAT ~ 
-                   female + nonwhite + 1, 
-                 data=df_lev3)
+model_lsat <- lm(LSAT ~ female + nonwhite + 1, data=df_lev3)
+summary(model_lsat)
 
 # perform the abduction step: estimate the residuals
 df_lev3$resid_UGPA = df_lev3$UGPA - predict(model_ugpa, newdata=df_lev3)
@@ -162,6 +160,9 @@ write.table(df_lev3_do_white,
             file = paste(path_rslt, "cf_LawSchool_lev3_doWhite.csv", sep = ""), 
             sep = "|")
 
+#
+# EOF
+#
 
 # # Level 2 -----------------------------------------------------------------
 # 
@@ -424,7 +425,3 @@ write.table(df_lev3_do_white,
 # write.table(df_lev2_do_white, 
 #             file = paste(path_rslt, "cf_LawSchool_lev2_2_doWhite.csv", sep = ""), 
 #             sep = "|")
-
-#
-# EOF
-#
